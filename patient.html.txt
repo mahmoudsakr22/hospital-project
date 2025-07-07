@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>ملف المريض - مستشفى الحياة الذكية</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 20px;
+    }
+    .profile-container {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 30px;
+      max-width: 1000px;
+      margin: auto;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    h2, h3 {
+      color: #0077cc;
+      text-align: center;
+    }
+    .info, .section {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      line-height: 2;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background-color: #0077cc;
+      color: #fff;
+      border: none;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+    .qr-code {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .qr-code img {
+      width: 150px;
+      height: 150px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    th {
+      background: #e6f2fb;
+    }
+  </style>
+</head>
+<body>
+
+<div class="profile-container" id="profile-content">
+  <h2>🩺 ملف المريض</h2>
+
+  <div class="info">
+    <strong>الاسم:</strong> أحمد عبد الله<br>
+    <strong>العمر:</strong> 45 سنة<br>
+    <strong>الرقم القومي:</strong> 29801120345678<br>
+    <strong>ID:</strong> RSW2424<br>
+    <strong>تاريخ الدخول:</strong> 2025-07-07<br>
+    <strong>القسم الحالي:</strong> الطوارئ<br>
+    <strong>الطبيب المعالج:</strong> د. محمد سامي
+  </div>
+
+  <div class="qr-code">
+    <p><strong>رمز QR للمريض:</strong></p>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=29801120345678" alt="QR Code">
+  </div>
+
+  <!-- تسجيل زيارة -->
+  <div class="section">
+    <h3>📋 تسجيل زيارة أو كشف</h3>
+    <form onsubmit="addVisit(event)">
+      <label>نوع الزيارة:</label>
+      <select id="visit-type" required>
+        <option value="">-- اختر نوع الزيارة --</option>
+        <option>كشف طبي</option>
+        <option>متابعة</option>
+        <option>استشارة</option>
+        <option>تقييم مبدئي</option>
+      </select>
+
+      <label>ملاحظات الطبيب:</label>
+      <textarea id="visit-notes" rows="3" required></textarea>
+
+      <label>التوصيات أو الإجراءات بعد الكشف:</label>
+      <textarea id="visit-action" rows="3"></textarea>
+
+      <button type="submit">تسجيل الزيارة</button>
+    </form>
+
+    <table id="visits-table">
+      <thead>
+        <tr>
+          <th>نوع الزيارة</th>
+          <th>الملاحظات</th>
+          <th>الإجراء</th>
+          <th>التاريخ</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- طلب تحويل -->
+  <div class="section">
+    <h3>📨 طلب تحويل إلى قسم آخر</h3>
+    <form onsubmit="addTransfer(event)">
+      <label>القسم المحول إليه:</label>
+      <select id="transfer-department" onchange="toggleSubField()" required>
+        <option value="">-- اختر القسم --</option>
+        <option>الرعاية</option>
+        <option>العمليات</option>
+        <option>العناية المركزة</option>
+        <option>التحاليل</option>
+        <option>الأشعة</option>
+        <option>الصيدلية</option>
+      </select>
+
+      <div id="sub-options" style="display:none;">
+        <label id="sub-label">تفاصيل الطلب:</label>
+        <input type="text" id="sub-detail" placeholder="مثلاً: تحليل دم - أشعة صدر - اسم الدواء...">
+      </div>
+
+      <label>ملاحظات:</label>
+      <textarea id="transfer-notes" rows="3"></textarea>
+
+      <button type="submit">إرسال الطلب</button>
+    </form>
+
+    <table id="transfer-table">
+      <thead>
+        <tr>
+          <th>القسم</th>
+          <th>التفاصيل</th>
+          <th>ملاحظات</th>
+          <th>التاريخ</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <button onclick="generatePDF()">📄 تحميل تقرير المريض PDF</button>
+</div>
+
+<script>
+  function addVisit(e) {
+    e.preventDefault();
+    const type = document.getElementById("visit-type").value;
+    const notes = document.getElementById("visit-notes").value;
+    const action = document.getElementById("visit-action").value;
+    const now = new Date().toLocaleString("ar-EG");
+
+    const row = `<tr><td>${type}</td><td>${notes}</td><td>${action}</td><td>${now}</td></tr>`;
+    document.querySelector("#visits-table tbody").innerHTML += row;
+
+    document.getElementById("visit-type").value = '';
+    document.getElementById("visit-notes").value = '';
+    document.getElementById("visit-action").value = '';
+  }
+
+  function toggleSubField() {
+    const dept = document.getElementById("transfer-department").value;
+    const subOptions = document.getElementById("sub-options");
+
+    if (dept === "التحاليل" || dept === "الأشعة" || dept === "الصيدلية") {
+      subOptions.style.display = "block";
+    } else {
+      subOptions.style.display = "none";
+      document.getElementById("sub-detail").value = "";
+    }
+  }
+
+  function addTransfer(e) {
+    e.preventDefault();
+    const dept = document.getElementById("transfer-department").value;
+    const detail = document.getElementById("sub-detail").value;
+    const notes = document.getElementById("transfer-notes").value;
+    const now = new Date().toLocaleString("ar-EG");
+
+    const row = `<tr><td>${dept}</td><td>${detail}</td><td>${notes}</td><td>${now}</td></tr>`;
+    document.querySelector("#transfer-table tbody").innerHTML += row;
+
+    document.getElementById("transfer-department").value = '';
+    document.getElementById("sub-detail").value = '';
+    document.getElementById("transfer-notes").value = '';
+    document.getElementById("sub-options").style.display = 'none';
+  }
+
+  function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.setFont("Arial");
+    doc.text("تقرير المريض - مستشفى الحياة الذكية", 20, 20);
+    doc.text("الاسم: أحمد عبد الله", 20, 30);
+    doc.text("الرقم القومي: 29801120345678", 20, 40);
+    doc.text("ID: RSW2424", 20, 50);
+    doc.text("القسم: الطوارئ", 20, 60);
+    doc.text("الطبيب المعالج: د. محمد سامي", 20, 70);
+    doc.text("التاريخ: " + new Date().toLocaleDateString("ar-EG"), 20, 80);
+    doc.text("تم توليد التقرير بواسطة النظام", 20, 100);
+    doc.save("تقرير_المريض.pdf");
+  }
+</script>
+
+</body>
+</html>

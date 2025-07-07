@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>مستشفى الحياة الذكية</title>
+  <style>
+    body { font-family: 'Cairo', sans-serif; background-color: #f4f6f8; margin: 0; padding: 0; }
+    header, footer { background-color: #0077b6; color: white; text-align: center; padding: 1rem; }
+    h1, h2 { margin: 0.5rem 0; }
+    .banner {
+      background: url('https://images.unsplash.com/photo-1588776814546-ec7ee9ed41de?auto=format&fit=crop&w=1500&q=80') center/cover no-repeat;
+      color: white; padding: 4rem 2rem; text-align: center;
+    }
+    .banner h2, .banner p {
+      background-color: rgba(0, 0, 0, 0.5); display: inline-block;
+      padding: 0.75rem 1.5rem; border-radius: 10px;
+    }
+    .section {
+      padding: 2rem; background: white; margin: 1rem;
+      border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .feature, .department {
+      padding: 1rem; background-color: #e0f7fa;
+      border-radius: 8px; text-align: center;
+    }
+    a.button {
+      background-color: #0077b6; color: white;
+      padding: 0.75rem 1.5rem; border-radius: 5px;
+      text-decoration: none; display: inline-block; margin-top: 1rem;
+    }
+    .login-form { text-align: center; margin-top: 2rem; }
+    .login-form input {
+      padding: 0.5rem; margin: 0.5rem;
+      border-radius: 5px; border: 1px solid #ccc; width: 200px;
+    }
+    .login-form button {
+      padding: 0.5rem 1rem; background-color: #0077b6;
+      color: white; border: none; border-radius: 5px; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>مستشفى الحياة الذكية 🏥</h1>
+    <p>نظام شبكي متكامل لمتابعة المرضى وتأمين البيانات الطبية</p>
+  </header>
+
+  <div class="banner">
+    <h2>أهلاً بك في مستشفى الحياة الذكية</h2>
+    <p>نقدم لك بيئة طبية ذكية لتحسين الرعاية الصحية باستخدام تقنيات حديثة.</p>
+  </div>
+
+  <div class="section login-form">
+    <h2>تسجيل الدخول</h2>
+    <input type="text" id="username" placeholder="اسم المستخدم">
+    <input type="password" id="password" placeholder="كلمة المرور">
+    <button onclick="login()">تسجيل الدخول</button>
+  </div>
+
+  <div class="section">
+    <h2>نظام مستشفى</h2>
+    <p>
+      مشروع مستشفى الحياة الذكية يهدف إلى بناء شبكة تشمل أقسام: الاستقبال، الرعاية، العمليات، العناية المركزة، الإدارة، التحاليل، والصيدلة.  
+      من خلال النظام يتم تسجيل المريض ومتابعة حالته الطبية، مع تطبيق موبايل يتيح للأقارب متابعة الحالة بسهولة.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2>الأقسام الطبية</h2>
+    <div class="features">
+      <div class="department">الاستقبال</div>
+      <div class="department">الرعاية</div>
+      <div class="department">العمليات</div>
+      <div class="department">العناية المركزة</div>
+      <div class="department">الإدارة</div>
+      <div class="department">التحاليل</div>
+      <div class="department">الصيدلة</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>مميزات النظام</h2>
+    <div class="features">
+      <div class="feature">تتبع حالة المريض لحظيًا</div>
+      <div class="feature">نظام دخول آمن</div>
+      <div class="feature">تطبيق موبايل</div>
+      <div class="feature">قاعدة بيانات مركزية</div>
+      <div class="feature">تنبيهات طوارئ</div>
+      <div class="feature">عرض نتائج التحاليل</div>
+      <div class="feature">إدارة الأدوية</div>
+    </div>
+  </div>
+
+  <div class="section" style="text-align: center">
+    <h2>📘 دليل المستخدم</h2>
+    <div class="features">
+      <div class="feature">
+        <h3>📋 حالة المريض</h3>
+        <p>عرض لحالة المريض وزياراته والفحوصات التي خضع لها.</p>
+        <a href="#" class="button">عرض الحالة</a>
+      </div>
+      <div class="feature">
+        <h3>📱 تحميل التطبيق</h3>
+        <p>حمّل تطبيق المستشفى لمتابعة الحالة الصحية وتحديد مواعيد الزيارة.</p>
+        <a href="#" class="button">تحميل التطبيق</a>
+      </div>
+      <div class="feature">
+        <h3>📞 تواصل معنا</h3>
+        <p>لأي استفسار، تواصل مع فريق الدعم الفني.</p>
+        <a href="#" class="button">اتصل بنا</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 مستشفى الحياة الذكية</p>
+  </footer>
+
+  <script>
+    function login() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (username === "doctor" && password === "1234") {
+        window.location.href = "emergency.html";
+      } else {
+        alert("بيانات الدخول غير صحيحة");
+      }
+    }
+  </script>
+</body>
+</html>
